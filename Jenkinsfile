@@ -8,6 +8,12 @@ pipeline {
 
     stages {
 
+        // stage('Clone Repository') {
+        //     steps {
+        //         git branch: 'develop', url: 'https://github.com/MoranDanino/devcards.git'
+        //     }
+        // }
+
         stage('Validate PR Target') {
             when {
                 expression {

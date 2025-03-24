@@ -1,0 +1,3 @@
+GITBRANCH=main
+GITURL=github.com/MoranDanino/devcards.git
+GITUSERNAME=MoranDanino
