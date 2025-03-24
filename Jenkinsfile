@@ -8,24 +8,14 @@ pipeline {
 
     stages {
 
-        // stage('Clone Repository') {
-        //     steps {
-        //         git branch: 'develop', url: 'https://github.com/MoranDanino/devcards.git'
-        //     }
-        // }
-
         stage('Validate PR Target') {
             when {
                 expression {
-                    return !(env.CHANGE_ID && env.CHANGE_TARGET == 'develop')
+                    return env.CHANGE_ID && env.CHANGE_TARGET == 'develop'
                 }
             }
             steps {
-                echo "This pipeline only runs for PRs targeting 'develop'. Skipping."
-                script {
-                    currentBuild.result = 'SUCCESS'
-                    exit 0
-                }
+                echo "PR is targeting the 'develop' branch. Proceeding with pipeline."
             }
         }
 
@@ -35,14 +25,16 @@ pipeline {
             }
         }
 
+        // Build Docker image
         stage('Build Docker Image') {
             steps {
                 sh '''
-                    docker build -t ${IMAGE_NAME}:${BUILD_ID} .
+                    docker build -t ${IMAGE_NAME}:${BUILD_ID} . 
                 '''
             }
         }
 
+        // Run the Docker container
         stage('Run Docker Container') {
             steps {
                 sh '''
